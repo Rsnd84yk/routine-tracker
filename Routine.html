@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Routine Pro</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+font-family:Arial;
+margin:0;
+text-align:center;
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+}
+
+.dark{
+background:#121212;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+background:white;
+color:black;
+padding:15px;
+margin:15px 0;
+border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+
+.dark .card{
+background:#1e1e1e;
+color:white;
+border:1px solid white;
+}
+
+input{
+padding:10px;
+border-radius:8px;
+border:none;
+width:60%;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.addBtn{background:#4CAF50;color:white;}
+.darkBtn{background:black;color:white;}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+td,th{
+padding:6px;
+border:1px solid gray;
+}
+
+.dark td,.dark th{
+border:1px solid white;
+}
+
+@media(max-width:600px){
+input{width:100%;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔥 Routine Pro</h1>
+
+<button class="darkBtn" onclick="toggleDark()">🌙 Mode sombre</button>
+
+<div class="card">
+<input id="habit" placeholder="Nouvelle habitude">
+<button class="addBtn" onclick="addHabit()">Ajouter</button>
+</div>
+
+<div class="card">
+<h3 id="score">Score: 0%</h3>
+</div>
+
+<div class="card">
+<table>
+<thead>
+<tr>
+<th>Habitude</th>
+<th>L</th><th>M</th><th>M</th>
+<th>J</th><th>V</th><th>S</th><th>D</th>
+<th>❌</th>
+</tr>
+</thead>
+<tbody id="list"></tbody>
+</table>
+</div>
+
+<div class="card">
+<canvas id="chart"></canvas>
+</div>
+
+</div>
+
+<script>
+let chart;
+
+// ---------- SAVE ----------
+function save(){
+let data=[];
+
+document.querySelectorAll("#list tr").forEach(tr=>{
+let habit=tr.children[0].innerText;
+let checks=[...tr.querySelectorAll("input")]
+.map(c=>c.checked);
+data.push({habit,checks});
+});
+
+localStorage.setItem("routineData",
+JSON.stringify(data));
+}
+
+// ---------- LOAD ----------
+function load(){
+let data=JSON.parse(localStorage.getItem("routineData")||"[]");
+
+data.forEach(h=>{
+createRow(h.habit,h.checks);
+});
+
+update();
+}
+load();
+
+// ---------- CREATE ROW ----------
+function createRow(name,checks=[false,false,false,false,false,false,false]){
+let tr=document.createElement("tr");
+tr.innerHTML="<td>"+name+"</td>";
+
+checks.forEach(v=>{
+let td=document.createElement("td");
+let c=document.createElement("input");
+c.type="checkbox";
+c.checked=v;
+c.onchange=update;
+td.appendChild(c);
+tr.appendChild(td);
+});
+
+let del=document.createElement("button");
+del.innerText="❌";
+del.onclick=()=>{tr.remove();update();};
+
+let td=document.createElement("td");
+td.appendChild(del);
+tr.appendChild(td);
+
+list.appendChild(tr);
+}
+
+// ---------- ADD ----------
+function addHabit(){
+if(!habit.value) return;
+createRow(habit.value);
+habit.value="";
+update();
+}
+
+// ---------- UPDATE ----------
+function update(){
+let checks=document.querySelectorAll("input[type=checkbox]");
+let ok=[...checks].filter(x=>x.checked).length;
+let total=checks.length;
+
+let percent=total?Math.round(ok/total*100):0;
+score.innerText="Score: "+percent+"%";
+
+drawChart();
+save();
+}
+
+// ---------- GRAPH ----------
+function drawChart(){
+let days=[0,0,0,0,0,0,0];
+
+document.querySelectorAll("#list tr").forEach(r=>{
+let boxes=r.querySelectorAll("input");
+boxes.forEach((b,i)=>{
+if(b.checked) days[i]++;
+});
+});
+
+if(chart) chart.destroy();
+
+chart=new Chart(
+document.getElementById("chart"),
+{
+type:"bar",
+data:{
+labels:["L","M","M","J","V","S","D"],
+datasets:[{
+label:"Réussites",
+data:days
+}]
+}
+});
+}
+
+// ---------- DARK MODE ----------
+if(localStorage.getItem("dark")==="1"){
+document.body.classList.add("dark");
+}
+
+function toggleDark(){
+document.body.classList.toggle("dark");
+localStorage.setItem("dark",
+document.body.classList.contains("dark")?"1":"0");
+}
+</script>
+
+</body>
+</html>
