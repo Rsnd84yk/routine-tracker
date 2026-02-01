@@ -7,57 +7,112 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+
 body{
-    font-family:Arial;
-    margin:0;
-    text-align:center;
+font-family:Arial;
+margin:0;
+text-align:center;
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
 }
 
-/* Container responsive */
+/* CONTAINER */
 .container{
-    max-width:900px;
-    margin:auto;
-    padding:10px;
+max-width:900px;
+margin:auto;
+padding:10px;
 }
 
-/* Cartes adaptables */
+/* CARTES */
 .card{
-    width:95%;
-    max-width:500px;
-    margin:10px auto;
-    padding:15px;
-    border-radius:15px;
+background:white;
+color:black;
+padding:15px;
+margin:12px auto;
+border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+width:95%;
+max-width:500px;
 }
 
-/* Boutons adaptés au tactile */
+/* INPUTS */
+input{
+padding:12px;
+border-radius:10px;
+border:none;
+width:90%;
+font-size:16px;
+}
+
+/* BOUTONS */
 button{
-    padding:12px;
-    font-size:16px;
-    width:90%;
-    max-width:300px;
-    margin:5px;
+padding:12px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-size:16px;
+margin:6px;
+width:90%;
+max-width:250px;
 }
 
-/* Mobile optimisation */
-@media (max-width:600px){
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+}
 
-    h1{
-        font-size:22px;
-    }
+td,th{
+padding:6px;
+border:1px solid gray;
+font-size:14px;
+}
 
-    .card{
-        width:95%;
-        padding:10px;
-    }
+/* 🌙 DARK MODE */
+.dark{
+background:#121212;
+color:white;
+}
 
-    input{
-        width:90%;
-        padding:10px;
-        font-size:16px;
-    }
+.dark .card{
+background:#1e1e1e;
+color:white;
+border:1px solid white;
+}
+
+.dark td,.dark th{
+border:1px solid white;
+}
+
+.dark input{
+background:#2a2a2a;
+color:white;
+}
+
+.dark button{
+background:#333;
+color:white;
+border:1px solid white;
+}
+
+/* 📱 MOBILE */
+@media(max-width:600px){
+
+h1{font-size:22px;}
+
+.card{
+padding:12px;
+}
+
+td,th{
+font-size:12px;
+padding:4px;
+}
+
 }
 
 </style>
+
 </head>
 
 <body>
@@ -215,5 +270,6 @@ document.body.classList.contains("dark")?"1":"0");
 
 </body>
 </html>
+
 
 
