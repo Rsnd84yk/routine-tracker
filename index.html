@@ -126,7 +126,7 @@ padding:4px;
 </div>
 
 <div class="card">
-<h3 id="score">Score: 0%</h3>
+<h3 id="percent">Réussite : 0%</h3>
 </div>
 
 <div class="card">
@@ -150,6 +150,19 @@ padding:4px;
 </div>
 
 <script>
+  let calendar=document.getElementById("calendar");
+let percentText=document.getElementById("percent");
+
+function updatePercent(){
+
+let total=document.querySelectorAll(".day").length;
+let done=document.querySelectorAll(".day.done").length;
+
+let percent=Math.round(done/total*100);
+
+percentText.innerText="Réussite : "+percent+"%";
+
+}
 let chart;
 
 // ---------- SAVE ----------
@@ -267,6 +280,7 @@ document.body.classList.contains("dark")?"1":"0");
 
 </body>
 </html>
+
 
 
 
