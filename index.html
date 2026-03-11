@@ -1,7 +1,9 @@
+
 <!DOCTYPE html>
 <html>
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -46,36 +48,29 @@ border:1px solid white;
 table{
 width:100%;
 border-collapse:collapse;
-font-size:12px;
 }
 
 td,th{
 border:1px solid gray;
-padding:4px;
+padding:6px;
 }
 
 .dark td,.dark th{
 border:1px solid white;
 }
 
-input{
-padding:10px;
-border-radius:10px;
-border:none;
-}
-
 button{
-padding:10px;
+padding:8px;
 border:none;
-border-radius:10px;
+border-radius:8px;
 cursor:pointer;
-margin:5px;
+margin:3px;
 }
 
-.skip{
-background:red;
-color:white;
-font-weight:bold;
+input{
+padding:8px;
+border-radius:8px;
+border:none;
 }
 
 </style>
@@ -101,7 +96,9 @@ font-weight:bold;
 <div class="card">
 
 <input id="habit" placeholder="Nouvelle habitude">
+
 <button onclick="addHabit()">Ajouter</button>
+
 <button onclick="clearChecks()">Tout décocher</button>
 
 </div>
@@ -116,13 +113,13 @@ font-weight:bold;
 
 <th>Habitude</th>
 
-<th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
-<th>6</th><th>7</th><th>8</th><th>9</th><th>10</th>
-<th>11</th><th>12</th><th>13</th><th>14</th><th>15</th>
-<th>16</th><th>17</th><th>18</th><th>19</th><th>20</th>
-<th>21</th><th>22</th><th>23</th><th>24</th><th>25</th>
-<th>26</th><th>27</th><th>28</th><th>29</th><th>30</th>
-<th>31</th>
+<th>L</th>
+<th>M</th>
+<th>M</th>
+<th>J</th>
+<th>V</th>
+<th>S</th>
+<th>D</th>
 
 <th>❌</th>
 
@@ -160,22 +157,14 @@ function update(){
 
 let checks=document.querySelectorAll("input[type=checkbox]")
 
-let total=0
+let total=checks.length
 let ok=0
 
 checks.forEach(c=>{
-
-if(!c.classList.contains("skip")){
-
-total++
-
 if(c.checked) ok++
-
-}
-
 })
 
-let percent= total ? Math.round(ok/total*100):0
+let percent= total ? Math.round(ok/total*100) : 0
 
 score.innerText="Score : "+percent+"%"
 
@@ -191,9 +180,23 @@ function createRow(name,checks=[]){
 
 let tr=document.createElement("tr")
 
-tr.innerHTML="<td>"+name+"</td>"
+let tdName=document.createElement("td")
 
-for(let i=0;i<31;i++){
+tdName.innerText=name
+
+tdName.onclick=function(){
+
+let newName=prompt("Modifier habitude",name)
+
+if(newName) tdName.innerText=newName
+
+save()
+
+}
+
+tr.appendChild(tdName)
+
+for(let i=0;i<7;i++){
 
 let td=document.createElement("td")
 
@@ -209,7 +212,19 @@ c.oncontextmenu=function(e){
 
 e.preventDefault()
 
+if(td.innerText=="❌"){
+
+td.innerHTML=""
+
+td.appendChild(c)
+
+}else{
+
 td.innerHTML="❌"
+
+}
+
+update()
 
 }
 
@@ -223,7 +238,7 @@ let del=document.createElement("button")
 
 del.innerText="X"
 
-del.onclick=()=>{tr.remove();update();}
+del.onclick=()=>{tr.remove();update()}
 
 let td=document.createElement("td")
 
@@ -249,7 +264,8 @@ update()
 
 function clearChecks(){
 
-document.querySelectorAll("input[type=checkbox]").forEach(c=>c.checked=false)
+document.querySelectorAll("input[type=checkbox]")
+.forEach(c=>c.checked=false)
 
 update()
 
@@ -306,7 +322,6 @@ load()
 </body>
 
 </html>
-
 
 
 
